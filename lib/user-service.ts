@@ -32,6 +32,12 @@ export const userService = {
 
       if (!response.ok) {
         const errorData = await response.json()
+
+        // Gérer le cas spécifique du status 409
+        if (response.status === 409) {
+          throw new Error("Cet utilisateur existe déjà. Veuillez vous connecter.")
+        }
+
         throw new Error(errorData.detail || "Erreur lors de l'inscription")
       }
 
@@ -40,7 +46,6 @@ export const userService = {
       throw new Error(error.message || "Erreur lors de l'inscription")
     }
   },
-
 
   // Récupération de tous les utilisateurs
   getAllUsers: async (): Promise<UserResponse[]> => {
