@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardDescription } from "@/co
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
-import { authService } from "@/lib/auth-service"; // Remplace par ton service réel
+import { authService } from "@/lib/auth-service";
 
 interface LoginRequest {
   username: string;
@@ -36,8 +36,8 @@ export default function ConnexionPage() {
     setError(null);
 
     try {
-      await authService.login(formData); 
-      router.push("/"); 
+      await authService.login(formData);
+      router.push("/");
     } catch (err: any) {
       const msg = translateErrorMessage(err.message);
       setError(msg);
@@ -47,15 +47,15 @@ export default function ConnexionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#071f37] to-yellow-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg">
         <div className="text-center mb-6">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-orange-600 rounded-full shadow-lg">
+            <div className="p-3 bg-yellow-500 rounded-full shadow-lg">
               <LogIn className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Connexion</h1>
-            <p className="text-sm sm:text-base text-orange-600 font-semibold">
+            <h1 className="text-3xl font-bold text-white">Connexion</h1>
+            <p className="text-sm sm:text-base text-yellow-500 font-semibold">
               Connectez-vous à votre compte
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function ConnexionPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -131,7 +131,7 @@ export default function ConnexionPage() {
           <CardFooter className="text-center">
             <p className="text-sm text-slate-600 w-full">
               Pas encore de compte ?{" "}
-              <Link href="/register" className="text-orange-600 hover:underline font-medium">
+              <Link href="/register" className="text-yellow-500 hover:underline font-medium">
                 Créer un compte
               </Link>
             </p>

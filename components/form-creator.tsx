@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -60,14 +59,14 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto border-orange-200 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-lg p-3 sm:p-4 md:p-6">
+    <Card className="w-full max-w-md mx-auto border-yellow-200 shadow-lg">
+      <CardHeader className="bg-gradient-to-r from-[#071f37] to-yellow-500 text-white rounded-t-lg p-3 sm:p-4 md:p-6">
         <CardTitle className="flex items-center gap-2 text-base sm:text-lg md:text-xl">
           <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
           <span className="hidden sm:inline">Créer un accès invité</span>
           <span className="sm:hidden">Nouvel accès</span>
         </CardTitle>
-        <CardDescription className="text-orange-100 text-xs sm:text-sm md:text-base">
+        <CardDescription className="text-yellow-100 text-xs sm:text-sm md:text-base">
           <span className="hidden sm:inline">Créez un nouveau code d'accès avec QR code</span>
           <span className="sm:hidden">Code d'accès avec QR</span>
         </CardDescription>
@@ -84,7 +83,7 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
               placeholder="Entrez le nom de l'invité"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 h-9 sm:h-10 md:h-11 text-sm sm:text-base"
+              className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500 h-9 sm:h-10 md:h-11 text-sm sm:text-base"
               required
             />
           </div>
@@ -106,7 +105,7 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
               value={formData.duration_minutes.toString()}
               onValueChange={(value) => setFormData({ ...formData, duration_minutes: Number.parseInt(value) })}
             >
-              <SelectTrigger className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 h-9 sm:h-10 md:h-11 text-sm sm:text-base">
+              <SelectTrigger className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500 h-9 sm:h-10 md:h-11 text-sm sm:text-base">
                 <SelectValue placeholder="Sélectionnez la durée" />
               </SelectTrigger>
               <SelectContent>
@@ -122,7 +121,7 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
 
           <Button
             type="submit"
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium h-9 sm:h-10 md:h-11 text-sm sm:text-base mt-4 sm:mt-6"
+            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium h-9 sm:h-10 md:h-11 text-sm sm:text-base mt-4 sm:mt-6"
             disabled={isLoading}
           >
             {isLoading ? (

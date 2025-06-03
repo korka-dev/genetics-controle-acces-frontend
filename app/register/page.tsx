@@ -63,16 +63,16 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#071f37] to-yellow-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg">
         {/* Header similaire à la home */}
         <div className="text-center mb-6">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-orange-600 rounded-full shadow-lg">
+            <div className="p-3 bg-yellow-500 rounded-full shadow-lg">
               <UserPlus className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Créer un compte</h1>
-            <p className="text-sm sm:text-base text-orange-600 font-semibold">
+            <h1 className="text-3xl font-bold text-white">Créer un compte</h1>
+            <p className="text-sm sm:text-base text-yellow-500 font-semibold">
               Rejoignez notre plateforme et commencez à gérer vos accès
             </p>
           </div>
@@ -163,7 +163,7 @@ export default function RegisterPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -180,7 +180,7 @@ export default function RegisterPage() {
           <CardFooter className="text-center">
             <p className="text-sm text-slate-600 w-full">
               Déjà inscrit ?{" "}
-              <Link href="/connexion" className="text-orange-600 hover:underline font-medium">
+              <Link href="/connexion" className="text-yellow-500 hover:underline font-medium">
                 Se connecter
               </Link>
             </p>

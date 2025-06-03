@@ -51,7 +51,7 @@ const authenticatedFetch = async (endpoint: string, options: RequestInit = {}): 
   if (response.status === 401) {
     // Token expiré ou invalide
     authService.logout();
-    window.location.href = "/login";
+    window.location.href = "/connexion";
     throw new Error("Session expirée. Veuillez vous reconnecter.");
   }
 

@@ -1,76 +1,75 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
-import { apiService } from "@/lib/api"
-import type { QRValidationResponse } from "@/lib/types"
-import { CheckCircle, XCircle, Loader2, QrCode, User, Phone, Clock } from "lucide-react"
+import type React from "react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/lib/api";
+import type { QRValidationResponse } from "@/lib/types";
+import { CheckCircle, XCircle, Loader2, QrCode, User, Phone, Clock } from "lucide-react";
 
 export default function QRValidator() {
-  const [qrData, setQrData] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [validationResult, setValidationResult] = useState<QRValidationResponse | null>(null)
-  const { toast } = useToast()
+  const [qrData, setQrData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [validationResult, setValidationResult] = useState<QRValidationResponse | null>(null);
+  const { toast } = useToast();
 
   const handleValidate = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!qrData.trim()) {
       toast({
         title: "Erreur",
         description: "Veuillez entrer les données du QR code",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await apiService.validateQRCode(qrData)
+      const response = await apiService.validateQRCode(qrData);
       if (response.success && response.data) {
-        setValidationResult(response.data)
+        setValidationResult(response.data);
         toast({
           title: response.data.valid ? "QR Code valide" : "QR Code invalide",
           description: response.data.message,
           variant: response.data.valid ? "default" : "destructive",
-        })
+        });
       } else {
         toast({
           title: "Erreur",
           description: response.error || "Erreur lors de la validation",
           variant: "destructive",
-        })
+        });
       }
     } catch (error) {
       toast({
         title: "Erreur",
         description: "Une erreur est survenue",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("fr-FR")
-  }
+    return new Date(dateString).toLocaleString("fr-FR");
+  };
 
   return (
     <div className="space-y-4 sm:space-y-6 w-full max-w-md mx-auto">
-      <Card className="w-full border-orange-200 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-lg p-4 sm:p-6">
+      <Card className="w-full border-yellow-200 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-[#071f37] to-yellow-500 text-white rounded-t-lg p-4 sm:p-6">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <QrCode className="h-4 w-4 sm:h-5 sm:w-5" />
             Valider un QR Code
           </CardTitle>
-          <CardDescription className="text-orange-100 text-sm sm:text-base">
+          <CardDescription className="text-yellow-100 text-sm sm:text-base">
             Entrez les données du QR code pour vérifier sa validité
           </CardDescription>
         </CardHeader>
@@ -86,14 +85,14 @@ export default function QRValidator() {
                 placeholder="Collez les données du QR code ici"
                 value={qrData}
                 onChange={(e) => setQrData(e.target.value)}
-                className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 h-10 sm:h-11 text-sm sm:text-base"
+                className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500 h-10 sm:h-11 text-sm sm:text-base"
                 required
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium h-10 sm:h-11 text-sm sm:text-base"
+              className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium h-10 sm:h-11 text-sm sm:text-base"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -114,7 +113,7 @@ export default function QRValidator() {
       </Card>
 
       {validationResult && (
-        <Card className="w-full border-orange-200 shadow-lg">
+        <Card className="w-full border-yellow-200 shadow-lg">
           <CardHeader
             className={`rounded-t-lg p-4 sm:p-6 ${
               validationResult.valid
@@ -140,10 +139,10 @@ export default function QRValidator() {
             </div>
 
             {validationResult.valid && validationResult.data && (
-              <div className="space-y-3 pt-4 border-t border-orange-200">
+              <div className="space-y-3 pt-4 border-t border-yellow-200">
                 <div className="grid grid-cols-1 gap-3">
                   <div className="flex items-start gap-2">
-                    <User className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                    <User className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <span className="font-medium text-sm sm:text-base">Nom:</span>
                       <span className="ml-2 break-words text-sm sm:text-base">{validationResult.data.name}</span>
@@ -151,7 +150,7 @@ export default function QRValidator() {
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <Phone className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                    <Phone className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <span className="font-medium text-sm sm:text-base">Téléphone:</span>
                       <span className="ml-2 break-all text-sm sm:text-base">{validationResult.data.phone}</span>
@@ -159,7 +158,7 @@ export default function QRValidator() {
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                    <Clock className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <span className="font-medium text-sm sm:text-base">Créé le:</span>
                       <span className="ml-2 break-words text-xs sm:text-sm">
@@ -169,7 +168,7 @@ export default function QRValidator() {
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                    <Clock className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <span className="font-medium text-sm sm:text-base">Expire le:</span>
                       <span className="ml-2 break-words text-xs sm:text-sm">
@@ -184,5 +183,5 @@ export default function QRValidator() {
         </Card>
       )}
     </div>
-  )
+  );
 }
