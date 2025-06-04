@@ -37,7 +37,7 @@ export default function ConnexionPage() {
 
     try {
       await authService.login(formData);
-      router.push("/");
+      router.push("/dashboard");
     } catch (err: any) {
       const msg = translateErrorMessage(err.message);
       setError(msg);
@@ -51,8 +51,20 @@ export default function ConnexionPage() {
       <div className="w-full max-w-lg">
         <div className="text-center mb-6">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-yellow-500 rounded-full shadow-lg">
-              <LogIn className="h-8 w-8 text-white" />
+             <div className="relative">
+              <img
+                src="/welqo.jpeg"
+                alt="Welqo Logo"
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl shadow-xl border-2 border-yellow-400/20"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.style.display = 'none';
+                  const next = img.nextSibling as HTMLElement | null;
+                  if (next) next.style.display = 'flex';
+                }}
+              />
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/20 to-orange-500/20 blur-md -z-10"></div>
             </div>
             <h1 className="text-3xl font-bold text-white">Connexion</h1>
             <p className="text-sm sm:text-base text-yellow-500 font-semibold">

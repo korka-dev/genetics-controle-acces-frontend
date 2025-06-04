@@ -63,10 +63,10 @@ export default function RecentActivity() {
 
   if (isLoading) {
     return (
-      <Card className="border-orange-200 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-orange-600" />
+      <Card className="border-yellow-200 shadow-lg w-full">
+        <CardHeader style={{ backgroundColor: '#FFF5CC' }}>
+          <CardTitle className="flex items-center gap-2 text-gray-900">
+            <Clock className="h-5 w-5 text-gray-900" />
             Activité Récente
           </CardTitle>
         </CardHeader>
@@ -85,13 +85,13 @@ export default function RecentActivity() {
   }
 
   return (
-    <Card className="border-orange-200 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-100">
+    <Card className="border-yellow-200 shadow-lg w-full">
+      <CardHeader style={{ backgroundColor: '#faba34' }}>
         <CardTitle className="flex items-center gap-2 text-gray-900">
-          <Clock className="h-5 w-5 text-orange-600" />
+          <Clock className="h-5 w-5 text-gray-900" />
           Activité Récente
         </CardTitle>
-        <CardDescription>Les derniers rendez-vous créés</CardDescription>
+        <CardDescription className="text-gray-700">Les derniers rendez-vous créés</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6">
         {recentAppointments.length === 0 ? (
@@ -104,13 +104,13 @@ export default function RecentActivity() {
             {recentAppointments.map((appointment) => (
               <div
                 key={appointment.id}
-                className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:bg-orange-50 transition-colors"
+                className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:bg-yellow-50 transition-colors"
               >
-                <div className="p-2 bg-orange-100 rounded-full">
-                  <User className="h-4 w-4 text-orange-600" />
+                <div className="p-2 bg-yellow-100 rounded-full">
+                  <User className="h-4 w-4 text-yellow-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-gray-900 truncate">{appointment.name}</p>
                       <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
@@ -119,7 +119,7 @@ export default function RecentActivity() {
                       </div>
                       <p className="text-xs text-gray-500 mt-1">{formatTimeAgo(appointment.created_at)}</p>
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 mt-2 sm:mt-0">
                       {isExpired(appointment.expires_at) ? (
                         <Badge variant="destructive" className="text-xs">
                           Expiré

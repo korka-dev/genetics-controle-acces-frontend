@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2, UserPlus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { userService } from "@/lib/user-service";
 
@@ -37,6 +37,7 @@ export default function RegisterPage() {
     password: "",
     phone_number: "",
   });
+  const [countryCode, setCountryCode] = useState("+221");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -62,23 +63,39 @@ export default function RegisterPage() {
     }
   };
 
+  const countryCodes = [
+    { code: "+1", name: "USA" },
+    { code: "+44", name: "UK" },
+    { code: "+33", name: "France" },
+    { code: "+49", name: "Germany" },
+    { code: "+221", name: "Sénégal" },
+    // Ajoutez d'autres indicatifs de pays selon vos besoins
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#071f37] to-yellow-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg">
-        {/* Header similaire à la home */}
         <div className="text-center mb-6">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-yellow-500 rounded-full shadow-lg">
-              <UserPlus className="h-8 w-8 text-white" />
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28">
+              <img
+                src="/welqo.jpeg"
+                alt="Welqo Logo"
+                className="w-full h-full rounded-xl shadow-xl border-2 border-yellow-400/20 object-cover"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.style.display = 'none';
+                }}
+              />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/20 to-orange-500/20 blur-md -z-10"></div>
             </div>
-            <h1 className="text-3xl font-bold text-white">Créer un compte</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">Créer un compte</h1>
             <p className="text-sm sm:text-base text-yellow-500 font-semibold">
               Rejoignez notre plateforme et commencez à gérer vos accès
             </p>
           </div>
         </div>
 
-        {/* Messages d'erreur / succès */}
         {error && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
@@ -91,7 +108,6 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {/* Formulaire dans une card */}
         <Card className="border-0 shadow-xl bg-white">
           <CardHeader className="text-center">
             <CardDescription className="text-slate-600">
@@ -126,15 +142,30 @@ export default function RegisterPage() {
               </div>
               <div>
                 <Label htmlFor="phone_number">Numéro de téléphone</Label>
-                <Input
-                  id="phone_number"
-                  type="text"
-                  placeholder="Entrez votre numéro de téléphone"
-                  value={formData.phone_number}
-                  onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                  required
-                  disabled={isLoading}
-                />
+                <div className="flex">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="flex-shrink-0 inline-flex items-center py-2 px-3 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+                    disabled={isLoading}
+                  >
+                    {countryCodes.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.code} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <Input
+                    id="phone_number"
+                    type="text"
+                    placeholder="Entrez votre numéro de téléphone"
+                    value={formData.phone_number}
+                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+                    required
+                    disabled={isLoading}
+                    className="rounded-l-none"
+                  />
+                </div>
               </div>
               <div>
                 <Label htmlFor="password">Mot de passe</Label>
@@ -190,3 +221,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+
