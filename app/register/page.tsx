@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import Link from "next/link";
 import { userService } from "@/lib/user-service";
 
 interface UserCreateRequest {
@@ -17,15 +17,13 @@ interface UserCreateRequest {
   phone_number: string;
 }
 
-const translateErrorMessage = (errorMessage: string): string => {
-  if (errorMessage.includes("already exists")) {
-    return "L'utilisateur existe déjà.";
-  } else if (errorMessage.includes("invalid email")) {
-    return "L'email est invalide.";
-  } else if (errorMessage.includes("weak password")) {
-    return "Le mot de passe est trop faible.";
+const translateErrorMessage = (errorMessage: string, statusCode?: number): string => {
+  if (statusCode === 409) {
+    return "L'utilisateur avec cet email ou numéro de téléphone existe déjà";
+  } else if (errorMessage.includes("already exists")) {
+    return "L'utilisateur avec cet email ou numéro de téléphone existe déjà";
   } else {
-    return "Une erreur est survenue lors de l'inscription.";
+    return "L'utilisateur avec cet email ou numéro de téléphone existe déjà";
   }
 };
 
@@ -56,8 +54,14 @@ export default function RegisterPage() {
         router.push("/connexion");
       }, 2000);
     } catch (err: any) {
-      const userFriendlyMessage = translateErrorMessage(err.message);
+      const statusCode = err.cause?.status;
+      const userFriendlyMessage = translateErrorMessage(err.message, statusCode);
       setError(userFriendlyMessage);
+
+      // Recharger la page après 3 secondes en cas d'erreur
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +73,6 @@ export default function RegisterPage() {
     { code: "+33", name: "France" },
     { code: "+49", name: "Germany" },
     { code: "+221", name: "Sénégal" },
-    // Ajoutez d'autres indicatifs de pays selon vos besoins
   ];
 
   return (
@@ -221,4 +224,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

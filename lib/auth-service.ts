@@ -19,43 +19,52 @@ export interface UserToken {
   name: string;
 }
 
+const translateErrorMessage = (errorMessage: string, statusCode?: number): string => {
+  if (statusCode === 403) {
+    return "Email ou mot de passe incorrect.";
+  } else if (errorMessage.includes("invalid credentials")) {
+    return "Email ou mot de passe incorrect.";
+  } else {
+    return "Une erreur est survenue lors de la connexion.";
+  }
+};
+
+
+// Service API pour l'authentification
 // Service API pour l'authentification
 export const authService = {
-  
   login: async (credentials: LoginRequest): Promise<TokenResponse> => {
-  try {
-    const formData = new FormData();
-    formData.append("username", credentials.username);
-    formData.append("password", credentials.password);
+    try {
+      const formData = new FormData();
+      formData.append("username", credentials.username);
+      formData.append("password", credentials.password);
 
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: "POST",
-      body: formData,
-    });
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        body: formData,
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
 
-      // Gestion des erreurs spécifiques
-      if (response.status === 403) {
-        throw new Error("Email ou mot de passe incorrect.");
+        // Gestion des erreurs spécifiques
+        throw new Error(errorData.detail || "Erreur lors de la connexion", {
+          cause: { status: response.status }
+        });
       }
 
-      throw new Error(errorData.detail || "Erreur lors de la connexion");
+      const data = await response.json();
+
+      // Stocker le token dans le localStorage
+      localStorage.setItem("token", data.access_token);
+
+      return data;
+    } catch (error: any) {
+      const statusCode = error.cause?.status;
+      const message = error.message || "Erreur lors de la connexion";
+      throw new Error(translateErrorMessage(message, statusCode));
     }
-
-    const data = await response.json();
-
-    // Stocker le token dans le localStorage
-    localStorage.setItem("token", data.access_token);
-
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message || "Erreur lors de la connexion");
-  }
-},
-
-
+  },
 
   // Récupération du token stocké
   getToken: (): string | null => {
@@ -80,4 +89,3 @@ export const authService = {
     return false;
   },
 };
-

@@ -35,7 +35,7 @@ export const userService = {
 
         // Gérer le cas spécifique du status 409
         if (response.status === 409) {
-          throw new Error("Cet utilisateur existe déjà. Veuillez vous connecter.")
+          throw new Error("L'utilisateur avec cet email ou numéro de téléphone existe déjà")
         }
 
         throw new Error(errorData.detail || "Erreur lors de l'inscription")

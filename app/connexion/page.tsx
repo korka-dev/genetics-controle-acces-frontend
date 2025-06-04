@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState} from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
+import { Eye, EyeOff, Loader2} from "lucide-react";
 import { authService } from "@/lib/auth-service";
 
 interface LoginRequest {
@@ -15,11 +15,13 @@ interface LoginRequest {
   password: string;
 }
 
-const translateErrorMessage = (errorMessage: string): string => {
-  if (errorMessage.includes("invalid credentials")) {
+const translateErrorMessage = (errorMessage: string, statusCode?: number): string => {
+  if (statusCode === 403) {
+    return "Email ou mot de passe incorrect.";
+  } else if (errorMessage.includes("invalid credentials")) {
     return "Email ou mot de passe incorrect.";
   } else {
-    return "Une erreur est survenue lors de la connexion.";
+    return "Email ou mot de passe incorrect.";
   }
 };
 
@@ -39,8 +41,12 @@ export default function ConnexionPage() {
       await authService.login(formData);
       router.push("/dashboard");
     } catch (err: any) {
-      const msg = translateErrorMessage(err.message);
+      const statusCode = err.cause?.status;
+      const msg = translateErrorMessage(err.message, statusCode);
       setError(msg);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +57,7 @@ export default function ConnexionPage() {
       <div className="w-full max-w-lg">
         <div className="text-center mb-6">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
-             <div className="relative">
+            <div className="relative">
               <img
                 src="/welqo.jpeg"
                 alt="Welqo Logo"
@@ -63,7 +69,6 @@ export default function ConnexionPage() {
                   if (next) next.style.display = 'flex';
                 }}
               />
-              {/* Glow effect */}
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/20 to-orange-500/20 blur-md -z-10"></div>
             </div>
             <h1 className="text-3xl font-bold text-white">Connexion</h1>
