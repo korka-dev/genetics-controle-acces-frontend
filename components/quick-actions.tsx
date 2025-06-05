@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Calendar, RefreshCw, Search, Home, Shield } from "lucide-react";
+import { useState } from "react";
 
 interface QuickActionsProps {
   onCreateAppointment: () => void;
@@ -12,25 +14,33 @@ interface QuickActionsProps {
 }
 
 export default function QuickActions({
-  onCreateAppointment,
   onRefreshData,
-  onOpenSearch,
-  onOpenCalendar,
 }: QuickActionsProps) {
+  const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const handleViewCalendar = () => {
-    if (onOpenCalendar) {
-      onOpenCalendar();
-    }
+    router.push("/calendrier-view"); 
   };
 
   const handleSearchAppointments = () => {
-    if (onOpenSearch) {
-      onOpenSearch();
-    }
+    router.push("/search-access");
   };
 
   const handleAnalytics = () => {
     console.log("Affichage des analytics de sécurité...");
+  };
+
+  const handleCreateAppointment = () => {
+    router.push("/create-access");
+  };
+
+  const handleRefreshClick = () => {
+    setIsRefreshing(true);
+    onRefreshData();
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000); // Désactive l'animation après 1 seconde
   };
 
   const actions = [
@@ -40,7 +50,7 @@ export default function QuickActions({
       icon: Plus,
       style: { backgroundColor: '#427bb3' },
       hoverStyle: { backgroundColor: '#1a3a5a' },
-      onClick: onCreateAppointment,
+      onClick: handleCreateAppointment,
     },
     {
       title: "Rechercher",
@@ -87,10 +97,10 @@ export default function QuickActions({
             <Button
               variant="outline"
               size="sm"
-              onClick={onRefreshData}
+              onClick={handleRefreshClick}
               className="border-yellow-300 text-yellow-600 hover:bg-yellow-50 h-8 sm:h-9 text-xs sm:text-sm"
             >
-              <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <RefreshCw className={`h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Actualiser</span>
               <span className="sm:hidden">Actualiser</span>
             </Button>

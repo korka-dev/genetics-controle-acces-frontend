@@ -1,22 +1,14 @@
 "use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import QuickActions from "@/components/quick-actions";
-import RecentActivity from "@/components/recent-activity";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import FormsList from "@/components/forms-list";
 
-export default function DashboardPage() {
+export default function ManageAccess() {
+  const [refreshTrigger] = useState(0);
   const router = useRouter();
-
-  const handleCreateAppointment = () => {
-    console.log("Créer un nouvel accès");
-  };
-
-  const handleRefreshData = () => {
-    console.log("Actualiser les données");
-  };
 
   const handleGoBack = () => {
     router.back(); // Navigue vers la page précédente
@@ -24,7 +16,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0b233a]">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8 max-w-7xl">
         {/* Bouton de retour pour la version mobile */}
         <div className="sm:hidden mb-4">
           <Button
@@ -48,7 +40,7 @@ export default function DashboardPage() {
               />
             </div>
             <div className="text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white">Tableau de Bord</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">Gérer les Accès</h1>
               <p className="text-sm sm:text-base text-yellow-500 font-semibold">
                 Genetics-Services
               </p>
@@ -56,15 +48,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <QuickActions
-          onCreateAppointment={handleCreateAppointment}
-          onRefreshData={handleRefreshData}
-        />
-
-        {/* Ajoutez le composant RecentActivity ici */}
-        <div className="mt-6 sm:mt-8 md:mt-10 w-full">
-          <RecentActivity />
-        </div>
+        <FormsList refreshTrigger={refreshTrigger} />
       </div>
     </div>
   );

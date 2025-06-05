@@ -4,6 +4,12 @@ export interface FormDataCreate {
   duration_minutes: number
 }
 
+export interface User {
+  name: string;
+  email: string;
+  phone_number: string
+}
+
 export interface FormDataResponse {
   id: string
   name: string
@@ -11,19 +17,21 @@ export interface FormDataResponse {
   qr_code_data?: string
   created_at: string
   expires_at: string
+  user: User
 }
 
 export interface QRValidationData {
-  name: string
-  phone: string
-  created_at: string
-  expires_at: string
+  name: string;
+  phone: string;
+  created_at: string;
+  expires_at: string;
+  user: User;
 }
 
 export interface QRValidationResponse {
-  valid: boolean
-  message: string
-  data?: QRValidationData
+  valid: boolean;
+  message: string;
+  data?: QRValidationData;
 }
 
 export interface FormDataUpdate {

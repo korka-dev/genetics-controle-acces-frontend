@@ -1,50 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import StatsDashboard from "@/components/stats-dashboard"
-import RecentActivity from "@/components/recent-activity"
-import { QrCode, FileText, BarChart3, Menu, User, LogOut, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import StatsDashboard from "@/components/stats-dashboard";
+import RecentActivity from "@/components/recent-activity";
+import { QrCode, FileText, BarChart3, Menu, User, LogOut, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/dropdown-menu";
 
 export default function Home() {
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const router = useRouter()
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const router = useRouter();
 
   const handleRefreshData = () => {
-    setRefreshTrigger((prev) => prev + 1)
-  }
+    setRefreshTrigger((prev) => prev + 1);
+  };
 
   const handleDashboardClick = () => {
-    router.push("/dashboard-page")
-  }
+    router.push("/dashboard-page");
+  };
 
   const handleCreateClick = () => {
-    router.push("/create")
-  }
+    router.push("/create-access");
+  };
 
   const handleManageClick = () => {
-    router.push("/manage")
-  }
+    router.push("/manage-access");
+  };
 
   const handleAccountClick = () => {
-    router.push("/account")
-  }
+    router.push("/account");
+  };
 
   const handleLogout = () => {
-    router.push("/connexion")
-  }
+    router.push("/connexion");
+  };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#071f37' }}>
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8 max-w-7xl">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#071f37' }}>
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8 max-w-7xl w-full">
         {/* Header */}
         <div className="text-center mb-4 sm:mb-6 md:mb-8">
           <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
@@ -70,7 +70,7 @@ export default function Home() {
         </div>
 
         {/* Navigation Bar */}
-        <div className="mb-6 sm:mb-8 md:mb-10">
+        <div className="mb-6 sm:mb-8 md:mb-10 w-full">
           {/* Desktop Navigation - Masqué sur mobile */}
           <div className="hidden md:grid grid-cols-4 gap-2">
             <Button
@@ -230,12 +230,7 @@ export default function Home() {
         <div className="w-full">
           <StatsDashboard key={refreshTrigger} />
         </div>
-
-        {/* Recent Activity */}
-        <div className="mt-6 sm:mt-8 md:mt-10 w-full">
-          <RecentActivity key={refreshTrigger} />
-        </div>
       </div>
     </div>
-  )
+  );
 }

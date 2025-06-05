@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import { apiService } from "@/lib/api"
-import type { FormDataCreate } from "@/lib/types"
-import { Loader2, Plus } from "lucide-react"
-import PhoneInput from "@/components/phone-input"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/lib/api";
+import type { FormDataCreate } from "@/lib/types";
+import { Loader2, Plus } from "lucide-react";
+import PhoneInput from "@/components/phone-input";
 
 interface FormCreatorProps {
-  onFormCreated?: () => void
+  onFormCreated?: () => void;
 }
 
 export default function FormCreator({ onFormCreated }: FormCreatorProps) {
@@ -22,41 +22,45 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
     name: "",
     phone: "",
     duration_minutes: 60,
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
-      const response = await apiService.createForm(formData)
+      const response = await apiService.createForm(formData);
 
       if (response.success) {
         toast({
           title: "Succès",
           description: "Accès créé avec succès !",
-        })
-        setFormData({ name: "", phone: "", duration_minutes: 60 })
-        onFormCreated?.()
+        });
+        setFormData({ name: "", phone: "", duration_minutes: 60 });
+
+        setTimeout(() => {
+          router.push("/dashboard-page");
+        }, 2000); 
       } else {
         toast({
           title: "Erreur",
           description: response.error || "Erreur lors de la création de l'accès",
           variant: "destructive",
-        })
+        });
       }
     } catch (error) {
       toast({
         title: "Erreur",
         description: "Une erreur inattendue est survenue",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto border-yellow-200 shadow-lg">
@@ -88,7 +92,6 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
             />
           </div>
 
-          {/* Composant PhoneInput responsive */}
           <PhoneInput
             id="phone"
             value={formData.phone}
@@ -140,5 +143,5 @@ export default function FormCreator({ onFormCreated }: FormCreatorProps) {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

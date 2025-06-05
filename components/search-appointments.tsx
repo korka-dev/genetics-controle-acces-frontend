@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ interface SearchAppointmentsProps {
 }
 
 export default function SearchAppointments({ isOpen, onClose, onRefresh }: SearchAppointmentsProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -71,70 +73,10 @@ export default function SearchAppointments({ isOpen, onClose, onRefresh }: Searc
     }
   };
 
-  useEffect(() => {
-    if (!appointments.length) return;
-
-    let results = [...appointments];
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      results = results.filter(
-        (apt) =>
-          apt.name.toLowerCase().includes(query) ||
-          apt.phone.toLowerCase().includes(query) ||
-          apt.id.toLowerCase().includes(query),
-      );
-    }
-
-    if (statusFilter !== "all") {
-      const now = new Date();
-      if (statusFilter === "active") {
-        results = results.filter((apt) => new Date(apt.expires_at) > now);
-      } else if (statusFilter === "expired") {
-        results = results.filter((apt) => new Date(apt.expires_at) <= now);
-      } else if (statusFilter === "today") {
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        results = results.filter((apt) => {
-          const expiryDate = new Date(apt.expires_at);
-          return expiryDate >= today && expiryDate < tomorrow;
-        });
-      }
-    }
-
-    if (dateFilter !== "all") {
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const weekAgo = new Date(today);
-      weekAgo.setDate(today.getDate() - 7);
-      const monthAgo = new Date(today);
-      monthAgo.setMonth(today.getMonth() - 1);
-
-      if (dateFilter === "today") {
-        results = results.filter((apt) => {
-          const createdDate = new Date(apt.created_at);
-          return createdDate >= today && createdDate < tomorrow;
-        });
-      } else if (dateFilter === "week") {
-        results = results.filter((apt) => {
-          const createdDate = new Date(apt.created_at);
-          return createdDate >= weekAgo;
-        });
-      } else if (dateFilter === "month") {
-        results = results.filter((apt) => {
-          const createdDate = new Date(apt.created_at);
-          return createdDate >= monthAgo;
-        });
-      }
-    }
-
-    results.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-    setFilteredAppointments(results);
-  }, [searchQuery, statusFilter, dateFilter, appointments]);
+  const handleClose = () => {
+    onClose();
+    router.push("/dashboard-page");
+  };
 
   const handleDelete = async (formId: string) => {
     setDeletingId(formId);
@@ -221,6 +163,71 @@ export default function SearchAppointments({ isOpen, onClose, onRefresh }: Searc
     setDateFilter("all");
   };
 
+  useEffect(() => {
+    if (!appointments.length) return;
+
+    let results = [...appointments];
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      results = results.filter(
+        (apt) =>
+          apt.name.toLowerCase().includes(query) ||
+          apt.phone.toLowerCase().includes(query) ||
+          apt.id.toLowerCase().includes(query),
+      );
+    }
+
+    if (statusFilter !== "all") {
+      const now = new Date();
+      if (statusFilter === "active") {
+        results = results.filter((apt) => new Date(apt.expires_at) > now);
+      } else if (statusFilter === "expired") {
+        results = results.filter((apt) => new Date(apt.expires_at) <= now);
+      } else if (statusFilter === "today") {
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        results = results.filter((apt) => {
+          const expiryDate = new Date(apt.expires_at);
+          return expiryDate >= today && expiryDate < tomorrow;
+        });
+      }
+    }
+
+    if (dateFilter !== "all") {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const weekAgo = new Date(today);
+      weekAgo.setDate(today.getDate() - 7);
+      const monthAgo = new Date(today);
+      monthAgo.setMonth(today.getMonth() - 1);
+
+      if (dateFilter === "today") {
+        results = results.filter((apt) => {
+          const createdDate = new Date(apt.created_at);
+          return createdDate >= today && createdDate < tomorrow;
+        });
+      } else if (dateFilter === "week") {
+        results = results.filter((apt) => {
+          const createdDate = new Date(apt.created_at);
+          return createdDate >= weekAgo;
+        });
+      } else if (dateFilter === "month") {
+        results = results.filter((apt) => {
+          const createdDate = new Date(apt.created_at);
+          return createdDate >= monthAgo;
+        });
+      }
+    }
+
+    results.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    setFilteredAppointments(results);
+  }, [searchQuery, statusFilter, dateFilter, appointments]);
+
   if (!isOpen) return null;
 
   return (
@@ -236,7 +243,7 @@ export default function SearchAppointments({ isOpen, onClose, onRefresh }: Searc
             <Button
               variant="ghost"
               className="text-white hover:bg-yellow-700 h-8 w-8 p-0 sm:h-auto sm:w-auto sm:p-2"
-              onClick={onClose}
+              onClick={handleClose}
             >
               <X className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="sr-only">Fermer</span>
@@ -473,4 +480,3 @@ export default function SearchAppointments({ isOpen, onClose, onRefresh }: Searc
     </div>
   );
 }
-
